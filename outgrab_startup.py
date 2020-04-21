@@ -14,10 +14,15 @@ def getparser():
                         type=argparse.FileType('r'),
                         nargs='+',
                         help='input file(s) to be processed as individuals')
+    parser.add_argument("-p","--program",
+                        type=argparse.FileType('r'),
+                        nargs='?',
+                        default="default.grab",
+                        help='outgrab program file to be run on the input file(s)')
     parser.add_argument("-v","--verbosity",
                         type=int,
                         nargs='?',
-                        const=2,
+                        default=0,
                         help='silent=0, main=1, info=2, verbose=3, debug=4')
 
     parserargs = parser.parse_args()

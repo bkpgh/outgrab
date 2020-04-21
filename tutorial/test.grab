@@ -1,0 +1,245 @@
+# outgrab tutorial file
+# This is a comment
+! This is also a comment
+# Note that the following blank line is just ignored
+
+#My first program
+#print Hello World!
+
+
+#My first real outgrab program
+print -----------------------------------------------------------
+print "A single dumpline " 
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+
+#My second outgrab program
+print "goto bottom, then a single dumpline " 
+goto bottom
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+print "goto 1532, then a single dumpline " 
+goto 1532
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+
+#goto 100000
+#match "thing that exists after line 100000"
+#dumpline
+#print -----------------------------------------------------------
+#print "   "
+
+
+goto top
+print "Forward match, back, then backwards match "
+match Jacob
+back
+match Isaac direction -1
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+goto top
+print "Forward match, no back, then backwards match "
+match Jacob
+match Isaac direction -1
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+goto top
+print "match Jacob nfind 5"
+match Jacob nfind 5
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+goto top
+print "repeat 5: match Jacob, next, endrepeat, back "
+repeat 5
+   match Jacob
+   next
+endrepeat
+back
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+
+goto top
+print "repeat 5: match Jacob, endrepeat"
+repeat 5
+   match Jacob
+endrepeat
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+
+goto top
+print "match Jacob nfind 5"
+match Jacob nfind 5
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+goto top
+print "match Jacob 5 (leave out keyword 'nfind')"
+match Jacob 5
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+
+goto top
+print "match Jacob, next, then 3 dumplines"
+match Jacob
+next
+dumpline
+dumpline
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+
+
+goto top
+print "match Jacob, next, then dumplines 3"
+match Jacob
+next
+dumplines 3
+print -----------------------------------------------------------
+print "   "
+
+
+goto top
+print "repeat the above 5 times (5 x 3 dumps)"
+repeat 5
+   match Jacob
+   next
+   dumplines 3
+endrepeat
+print -----------------------------------------------------------
+print "   "
+
+goto top
+print "matchnextdump Jacob nfind 5 increment 1 nlines 3"
+matchnextdump Jacob nfind 5 increment 1 nlines 3
+print -----------------------------------------------------------
+print "   "
+
+
+print "match , next, remember, match, remember, dumpsection"
+match rolled
+next
+remember mystart
+match Rachel
+remember myend
+dumpsection mystart myend
+print -----------------------------------------------------------
+print "   "
+
+
+print "match dumpuntil match"
+match rolled
+dumpuntilmatch Rachel start False end True
+print -----------------------------------------------------------
+print "   "
+
+print "dumpfields $fieldn"
+goto bottom
+dumpfields $field3 $field7
+print -----------------------------------------------------------
+print "   "
+
+
+print "dumpfields n:m"
+goto bottom
+dumpfields 1:5 24:40
+print -----------------------------------------------------------
+print "   "
+
+
+print "dumpfields mixed order and type of fields"
+goto bottom
+dumpfields $field7 24:40 $field3 "Here is some text" 1:5
+print -----------------------------------------------------------
+print "   "
+
+print "holdsfields + dumpfields"
+goto top
+holdfields 1:30 
+goto bottom
+print "Genesis. Beginning to end:"
+dumpfields $hold1 " ...  "  68:200
+print -----------------------------------------------------------
+print "   "
+
+
+print "dumpline x 2 + switchlast"
+goto top
+dumpline
+dumpline
+switchlast
+print -----------------------------------------------------------
+print "   "
+
+
+print "dumpline + remove"
+goto top
+dumpline
+remove : 2
+print -----------------------------------------------------------
+print "   "
+
+
+print "dumpline + replace"
+goto top
+dumpline
+replace : " | " 2
+print -----------------------------------------------------------
+print "   "
+
+print "using readinput to get input from a different file"
+goto top
+readinput standardheader.txt
+switchinputto standardheader.txt
+dumpsection top bottom
+switchinputto $file1 
+dumpline
+print -----------------------------------------------------------
+print "   "
+
+
+print "Jacob AND Rachel using regular expressions"
+goto top
+matchnextdump (?=.*Jacob)(?=.*Rachel) nfind all
+print --------------------------------------------------------------
+print "   "
+
+
+print "Jacob AND Rachel using scratch file"
+goto top
+switchoutputto scratch
+matchnextdump Jacob nfind all
+switchoutputto output
+switchinputto scratch
+goto top
+matchnextdump Rachel nfind all
+print --------------------------------------------------------------
+print "   "
+
+
+writefile scratch myscratchfile.txt
+print --------------------------------------------------------------
+print "   "
+
+
+exit
+

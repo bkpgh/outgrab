@@ -4,8 +4,13 @@
 # Note that the following blank line is just ignored
 
 #My first program
-#print Hello World!
+print Hello World!
 
+!!!!! move or remove this exit command to run the rest of the file
+!
+exit
+!
+!!!!! move or remove this exit command to run the rest of the file
 
 #My first real outgrab program
 print -----------------------------------------------------------

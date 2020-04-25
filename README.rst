@@ -5,22 +5,26 @@
 Introduction
 -------------
 
-Outgrab programatically selects important information from large
-files and sends it to other files for later consumption by humans
-or other programs. In this sense, it is like a general-purpose
-report-writer. The canonical examples and motivating cases for the
-creation of outgrab are the large output files produced by programs
-for molecular simulations or quantum chemistry calculations.
-These output files can be thousands of lines long and while all of
-those lines may be important for some purposes, most often you just
-want to look at a few of the important ones or send a small subset
-of them to another program for, e.g., plotting. Outgrab can make
-this process simple, maintainable, and reproducible. 
+Outgrab programatically selects important information from,
+usually large, text files and sends that information to other files
+for later consumption by humans or other programs.
+It provides a relatively simple domain-specific
+language for file summarization, report writing, or input file
+creation. The canonical examples and motivating
+cases for the creation of outgrab are the large output files
+produced by programs for molecular simulations or quantum chemistry
+calculations. Those output files can be many thousands of lines long
+and while all of those lines may be important for some purposes,
+most often you just want to look at a few of the important ones
+or send a small subset of them to another program for, e.g.,
+plotting. Outgrab intends to make this process simple, maintainable,
+and reproducible. 
 
 Why would you use this program instead of grep, sed, awk, cut, paste, etc.?
 
 1. Because you forget how to use all of the options of those programs.
-2. Because the commands included are very close to what you would do by hand
+2. Because it makes some of the relevant operations easy to do.
+3. Because the commands included are very close to what you would do by hand
    when searching through an output file and selecting the bits of interest.
 
 License
@@ -48,8 +52,8 @@ you can picture it containing commmands like::
    match energy
    dumpline
 
-which finds the first line containing the word "energy" and
-prints/copies/sends it to another output file.
+which find the first line in an input file that contains the word
+"energy" and prints/copies/sends it to an output file.
 
 If these commands are placed in a file energy.grab, you want to run
 this program on a file simulation.output, and produce a file called
@@ -78,7 +82,7 @@ one or more files to outgrab via a pipe::
 
 in which case the the .txt files will be concatenated together and
 outgrab will see them as one file. The file coming in on stdin
-is reference by $file1 in the command language.
+is referenced by $file1 in the command language.
 
 You can also input files via the -i or --inputfiles flags like this::
 
@@ -88,16 +92,17 @@ These will be treated separately and can be referred to within the og
 command language as $file2, $file3, etc. or by their filenames, e.g.
 "a.txt".  Output goes to stdout: it by default goes to the screen
 or it may be redirected into an output file as in the initial example
-with simulation.summary.
+where it is redirected to simulation.summary.
 
 There is one more flag to outgrab, "-v" or --verbosity, which
-recognizes values from 0 (the default) to 4 which direct the program
+recognizes values from 0 to 4 which direct the program
 to produce increasing levels of informational or diagnostic output
-which goes to stderr (by default the screen). Verbosity = 0 means
-silent; the program produces no output other than the result of the
-outgrab commands. Verbosity = 4 produces huge amounts of output and
-is mostly useful for debugging ooutgrab itself. Verbosity levels 1,2,3
-may be useful for debugging outgrab program files or individual outgrab
+which goes to stderr (by default the screen). Verbosity = 0,
+the default, means silent; the program produces no output other
+than the result of the outgrab commands. Verbosity = 4 produces
+huge amounts of output and is mostly useful for debugging
+outgrab itself. Verbosity levels 1,2,3 may be useful for debugging
+outgrab program files or individual outgrab
 command lines.
 
 =======================================================
@@ -175,18 +180,18 @@ Commands
 Commands for moving around the input file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-============= ==================== ======================================================
+============= ==================== =======================================================
 command         argument             effect
-============= ==================== ======================================================
-match          | find                go to next line that matches "find" and set focus there
-               | nfind               the number of matches to find before stopping 
-               | direction           -1 or 1 to indicate searching backwards or forwards
-next or step    increment            go forward increment lines; default 1; can be negative
-back            increment            go backward increment lines; default 1; back n = next -n
-remember        label                assign label to current line forget
-forget          label                erase label; not usually necessary
-goto            position             set current line to line number label
-============= ==================== ======================================================
+============= ==================== =======================================================
+match          | find              | go to next line that matches "find"; set focus there
+               | nfind             | the number of matches to find before stopping 
+               | direction         | -1 or 1 to indicate searching backwards or forwards
+next or step    increment          go forward increment lines; default 1; can be negative
+back            increment          go backward increment lines; default 1; back n = next-n
+remember        label              assign label to current line forget
+forget          label              erase label; not usually necessary
+goto            position           set current line to line number label
+============= ==================== =======================================================
 
 Note that: next, back, goto  update the "state" or the current
 line number to the one indicated, while match updates the "state"
@@ -235,9 +240,9 @@ print           text                   | write arbitrary text string to output
 Commands related to different input/output files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-=============== ==================== ======================================================
+=============== ==================== =======================================================
 command           arguments            effect
-=============== ==================== ======================================================
+=============== ==================== =======================================================
 switchinputto     name                 start processing input file name at its current line
 switchoutputto    name                 start writing to the named output file;
                                        usually "output"
@@ -253,7 +258,8 @@ empty             name                 | delete all the lines in the input file 
                                        | affects only internal representation of file in
                                        | memory; no changes on disk
                                        | probably most useful for emptying the scratch file
-=============== ==================== ======================================================
+include           filename             insert lines of "filename" into the current *program*
+=============== ==================== =======================================================
 
 Commands for modifying the last line of the output file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -521,7 +527,7 @@ times, use repeat/endrepeat::
 Because structures like that occur so often,
 a single command is provided to replace that loop::
 
-    matchnextdump Jacob nfind 5 next 1 nlines 3
+    matchnextdump Jacob nfind 5 increment 1 nlines 3
 
 Very useful outgrab programs often consist
 solely a series of matchnextdump commands plus
@@ -720,8 +726,8 @@ brought in via the -i or --inputfiles flags.
 
 The actual externally created output file (or the output
 to the screen) is only produced at the end of outgrab,
-after the external file is completely built and all
-outgrab commands have been executed.
+after the internal version of that file is completely
+built and all outgrab commands have been executed.
 
 readinput, switchinputto, setinputfile 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -763,9 +769,23 @@ that is easier for you to remember::
     setinputfile $file1 standardin
 
 and use "myinputfile", e.g. in "switchinputto standardin" instead
-of "switchinputto $file1". There is an analogous setputputfile
+of "switchinputto $file1". There is an analogous setoutputfile
 command and either one can be used on any of the appropriate
 input or output files if you know one name for them.
+
+Outgrab does not have subroutines or functions, but for
+sections of code that you want to repeat or use in different
+programs, you can put the code in a separate file and "include"
+it in your current program. So, to add the standard header with
+one line, you would do::
+
+    include standardheader.txt
+
+in your outgrab program and inside of a file, "standardheader.grab", 
+you would place the command lines above starting with 
+"readinput standardheader.txt". When outgrab processes the include
+command, it removes it and inserts all the lines of the inserted
+file into the current program.
 
 switchoutputto, writefile
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

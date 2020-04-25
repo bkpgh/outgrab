@@ -6,11 +6,13 @@
 #My first program
 print Hello World!
 
+
 !!!!! move or remove this exit command to run the rest of the file
 !
 exit
 !
-!!!!! move or remove this exit command to run the rest of the file
+!!!!! or place '#' or '!" as the first character before it on the line 
+
 
 #My first real outgrab program
 print -----------------------------------------------------------
@@ -39,7 +41,6 @@ print "   "
 #dumpline
 #print -----------------------------------------------------------
 #print "   "
-
 
 goto top
 print "Forward match, back, then backwards match "
@@ -221,6 +222,12 @@ dumpline
 print -----------------------------------------------------------
 print "   "
 
+print "using include statement to get standard header"
+goto top
+include standardheader.grab
+print -----------------------------------------------------------
+print "   "
+
 
 print "Jacob AND Rachel using regular expressions"
 goto top
@@ -237,11 +244,6 @@ switchoutputto output
 switchinputto scratch
 goto top
 matchnextdump Rachel nfind all
-print --------------------------------------------------------------
-print "   "
-
-
-writefile scratch myscratchfile.txt
 print --------------------------------------------------------------
 print "   "
 

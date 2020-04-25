@@ -1,0 +1,6 @@
+# insert the standard header into the output
+readinput standardheader.txt
+switchinputto standardheader.txt
+dumpsection top bottom
+switchinputto $file1 
+dumpline

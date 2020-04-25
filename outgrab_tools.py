@@ -193,11 +193,9 @@ def createInputFiles():
         msg(ogdebug,"name= {}  :  object = {}".format(key,value))
      
 def createScratchFile(content):
-#   create Inp=InputFile or ProgramFile object from filehandler,string, or list of strings
+#   create ScratchFile object
     newfile = ScratchFile(content)
     msg(ogdebug,"new file object: {}".format(newfile))
-#   add a blank line at the end of the new file (to prevent matches on last line repeating...)
-#    newfile.addblankline()    # note "bottom" set to line before this blank line
     try:
         addfilename(newfile,content.name)
     except:
@@ -1056,6 +1054,35 @@ class ProgramFile(InputFile):
     def setoutputfile(self,outfile):
         self.outfile = outfile
 
+    def insertfile(self,filename,overwrite=True):
+        """Open an outgrab program file and insert it
+           into the currently processing outgrab program 
+           either in place of the current line
+           (overwrite = True, the default) or
+           after the current line (overwrite = False).
+        """
+
+        msg(ogverbose,"inserting program file: {} ".format(filename))
+        with open(filename, "r") as f:
+            mylines = [x.rstrip().lstrip() for x in f]
+
+            for thing in mylines:
+                msg(ogdebug," line = {} ".format(thing))
+
+            if overwrite:
+                lineadjust = 0
+            else:
+                lineadjust = 1
+            self.lines = ( self.lines[:self.current+lineadjust]
+                         + [" "]   # insert blank line to ensure first line of new program lines executed
+                         + mylines[:]
+                         + self.lines[self.current+1:] )
+            
+        self.length = len(self.lines) 
+        self.positions["bottom"] =  self.length - 1
+        self.current = self.current + lineadjust
+        self.positions["current"] = self.current
+
     def processcommands(self,comments=["#","!"]):
         """process commands in this file; translate them to the outgrab methods
            ignore comment lines beginning with any character in comments
@@ -1248,9 +1275,16 @@ class ProgramFile(InputFile):
             msg(ogverbose,"____________________________________________")
 
     def interpretcommand(self,command,tokens):
-        """ Translate the outgrab commands from a program into calls to outgrab_tools methods
+        """ Translate an outgrab command into calls to outgrab_tools methods
         """
         msg(ogdebug,"In interpretcommand, matchflag, execute: {}, {}".format(self.matchflag,self.execute))
+
+
+        if command == "include":
+            args = self.getargs(tokens,"comargs")
+            self.insertfile(args[0],overwrite=True)
+            self.updatemsg(command)
+            return
 
         if command == "match" and self.execute:        
             arg1,kwargdict = self.getargs(tokens,"comargdict")
@@ -1530,7 +1564,7 @@ class ProgramFile(InputFile):
             msg(ogmain,"Not executing command {} near line {} in Program {}: within ifmatch "
                        .format(command,self.current,self.names))
 
-        else:
+        elif command != "include":
             msg(ogmain,"Command {} near line {} in Program {} is not a valid outgrab command"
                        .format(command,self.current,self.names))
             ifkwargdict: msg(ogmain,"Arguments found: {} ".format(kwargdict))

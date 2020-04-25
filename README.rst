@@ -2,6 +2,8 @@
 **OUTGRAB**
 ======================
 
+.. contents::
+
 Introduction
 -------------
 
@@ -29,7 +31,7 @@ Why would you use this program instead of grep, sed, awk, cut, paste, etc.?
 
 If outgrab doesn't do something you would like, but one of the
 unix command-line tools mentioned above does, the best approach 
-may be to post-process the result of outgrab with, eg., sed.
+may be to post-process the result of outgrab with, e.g., sed.
 
 
 License

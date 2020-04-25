@@ -7,11 +7,14 @@
 print Hello World!
 
 
-!!!!! move or remove this exit command to run the rest of the file
+!     To run later sections of this command file,
+!     move the following "exit" command somewhere later,
+!     (after the section you want to run)
+!     remove it alltogether,
+!     or place '#' or '!" as the first character before it on the line 
+!     in order to turn it into a comment which is ignored by outgrab
 !
 exit
-!
-!!!!! or place '#' or '!" as the first character before it on the line 
 
 
 #My first real outgrab program

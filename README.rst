@@ -46,10 +46,11 @@ outgrab; it simply consists of three python files (which have been
 tested only under linux and python 3). There are two modules which
 should probably be placed on your PYTHONPATH so they can be imported:
 
-  outgrab_tools.py
-  outgrab_simulation.py
+  | outgrab_tools.py
+  | outgrab_simulation.py
 
-The outgrab interpreter is outgrab.py. For a minimum installation
+The outgrab interpreter is outgrab.py. It might be useful to add it
+to the system PATH variable. For a minimum installation
 to just get started, you can place the three .py files in the directory
 in which you want to work.
 
@@ -121,14 +122,15 @@ Syntax
 
 Each outgrab statement is a command name followed by zero or more
 arguments or parameters. The argument syntax is one of two types:
-1. a list of position-specific parameters (usually just one)::
 
-    command arg1 arg2 ...
+    | 1. a list of position-specific parameters (usually just one):
 
-2. a first position-specific parameter, followed by a list of
-name, value pairs::
+        command arg1 arg2 ...
 
-    command arg1 paramname1 param1 paramnane2 param2 ...
+    | 2. a first position-specific parameter, followed by a list of
+      name, value pairs:
+
+        command arg1 paramname1 param1 paramname2 param2 ...
 
 For example, "match energy nfind 3" is the command
 "match" followed by a first argument "energy"

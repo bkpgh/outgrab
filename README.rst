@@ -27,6 +27,11 @@ Why would you use this program instead of grep, sed, awk, cut, paste, etc.?
 3. Because the commands included are very close to what you would do by hand
    when searching through an output file and selecting the bits of interest.
 
+If outgrab doesn't do something you would like, but one of the
+unix command-line tools mentioned above does, the best approach 
+may be to post-process the result of outgrab with, eg., sed.
+
+
 License
 -------
 Outgrab is released under the MIT License. We hope you find it useful.
@@ -78,7 +83,7 @@ Input text files can come from several places, but at least one always
 comes from stdin. You can use redirection as above (<) or can send
 one or more files to outgrab via a pipe::
 
-  cat *.txt | python -p mytest.grab > myoutput.txt
+  cat *.txt | python outgrab.py -p mytest.grab > myoutput.txt
 
 in which case the the .txt files will be concatenated together and
 outgrab will see them as one file. The file coming in on stdin
@@ -114,9 +119,16 @@ Syntax
 
 Each outgrab statement is a command name followed by zero or more
 arguments or parameters. The argument syntax is one of two types:
-1. a list of position-specific parameters (usually just one),
+1. a list of position-specific parameters (usually just one)::
+
+    command arg1 arg2 ...
+
 2. a first position-specific parameter, followed by a list of
-name, value pairs e.g., "match energy nfind 3" is the command
+name, value pairs::
+
+    command arg1 paramname1 param1 paramnane2 param2 ...
+
+For example, "match energy nfind 3" is the command
 "match" followed by a first argument "energy"
 (which is the word to match), followed by a parameter pair with
 name "nfind" and value "3"; the number of matches to find.
@@ -136,7 +148,9 @@ and the end of the file (bottom). Top and bottom are reserved
 words and should always be valid. One usually finds things with
 *match* or a similar command rather than using an explicit line number.
 
-# or ! at the beginning of a line lead to it being ignored as a comment
+# or ! at the beginning of a line lead to it being ignored
+as a comment. Blank lines or lines containing only whitespace
+are also ignored.
 
 Preliminary Examples
 -----------------------
@@ -156,8 +170,8 @@ either "Energy" or "energy" (upper or lower case "E"), you can::
     match [E|e]nergy
 
 The above commands demonstrate the most common uses of outgrab:
-move around an input file, match certain text strings and print out
-the lines containing them, or lines near those lines.
+move around an input file, match certain text strings, print out
+the lines containing them, and/or print out other lines near those lines.
 
 Common Arguments or Parameters
 --------------------------------
@@ -188,7 +202,7 @@ match          | find              | go to next line that matches "find"; set fo
                | direction         | -1 or 1 to indicate searching backwards or forwards
 next or step    increment          go forward increment lines; default 1; can be negative
 back            increment          go backward increment lines; default 1; back n = next-n
-remember        label              assign label to current line forget
+remember        label              assign label to current line
 forget          label              erase label; not usually necessary
 goto            position           set current line to line number label
 ============= ==================== =======================================================
@@ -218,7 +232,7 @@ dumpsection     | position1            | send lines from position1 to position2
                 | position2            | to output and set focus to line after section
 dumpfields      | text                 | print text to output
                 | $fieldn              | designate nth whitespace-delimited field
-                | m:p                  | desinates columns or characters m to p
+                | m:p                  | a "slice" designates columns or characters m to p
                 | $holdn               | designates nth item stored by previous holdfields
                                        | e.g. "dumpfields $field3 1:10 feet"
                                        | prints the 3rd field, the columns 1-10, then "feet"
@@ -400,7 +414,8 @@ and "bottom" are predefined to point to the first and last
 lines of any input file, but other labels can be defined.
 You will see "goto top" many times in the test.grab file.
 This just resets the input file so each code snippet acts
-like it is a new program running on a fresh input file.
+like it is a new program running on a fresh input file
+except that the output file is not reset.
 
 There is another case where "goto" a line number might be useful.
 Outgrab currently reads all of the lines of all of input files
@@ -532,12 +547,12 @@ a single command is provided to replace that loop::
 Very useful outgrab programs often consist
 solely a series of matchnextdump commands plus
 possibly a few prints. This is an easy way to crunch
-a large output file into manageable proportions.
+a large output file into manageable portions.
 
 remember / forget, dumpsection, dumpuntilmatch
 --------------------------------------------------------------
 
-But what if the section you wish to print is defined
+What if the section you wish to print is defined
 not by a number of lines but by
 a match at the beginning and a match at the end?
 Here is one way to do it using labels::
@@ -768,7 +783,7 @@ that is easier for you to remember::
 
     setinputfile $file1 standardin
 
-and use "myinputfile", e.g. in "switchinputto standardin" instead
+and use "standardin", e.g. "switchinputto standardin" instead
 of "switchinputto $file1". There is an analogous setoutputfile
 command and either one can be used on any of the appropriate
 input or output files if you know one name for them.
@@ -779,9 +794,9 @@ programs, you can put the code in a separate file and "include"
 it in your current program. So, to add the standard header with
 one line, you would do::
 
-    include standardheader.txt
+    include standardheader.grab
 
-in your outgrab program and inside of a file, "standardheader.grab", 
+in your outgrab program and inside of the file, "standardheader.grab", 
 you would place the command lines above starting with 
 "readinput standardheader.txt". When outgrab processes the include
 command, it removes it and inserts all the lines of the inserted

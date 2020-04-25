@@ -2,7 +2,7 @@
 """ This is the outgrab processor/interpreter
     usage:
     python outgrab.py -v (verbosity)  -i (input.txt...) -p program.grab 
-    -v (optional) 0 = silent, 4 = debug, 1,2(default),3 = intermediate levels of output
+    -v (optional) 0 = silent (default), 4 = debug, 1,2,3 = intermediate levels of output
     -p the outgrab program to read in
     -i (optional) additional input files to read in; named $file2, $file3, etc.
     reads from stdin and internally calls that file $file1

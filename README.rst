@@ -256,26 +256,26 @@ print           text                   | write arbitrary text string to output
 Commands related to different input/output files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-=============== ==================== =======================================================
-command           arguments            effect
-=============== ==================== =======================================================
-switchinputto     name                 start processing input file name at its current line
-switchoutputto    name                 start writing to the named output file;
-                                       usually "output"
-setinputfile      name                 give an existing input file a new name,
-                                       e.g. setinputfilename $file2 auxilliary_file
-setoutputfile     name                 give existing output file a new name
-writefile         | name               write to filename the internal file corresponding
-                  | filename           to name. Not often used. 
-readinput         name                 read another input file and
-                                       give it the name $filen where n is
-                                       1 more than the previous highest-numbered input file
-empty             name                 | delete all the lines in the input file "name"
-                                       | affects only internal representation of file in
-                                       | memory; no changes on disk
-                                       | probably most useful for emptying the scratch file
-include           filename             insert lines of "filename" into the current *program*
-=============== ==================== =======================================================
+=================  ==================== =======================================================
+command             arguments            effect
+=================  ==================== =======================================================
+switchinputto      name                 start processing input file name at its current line
+switchoutputto     name                 start writing to the named output file;
+                                        usually "output"
+setinputname       name                 give an existing input file a new name,
+                                        e.g. setinputname $file2 auxilliary_file
+setoutputname      name                 give existing output file a new name
+writefile          | name               write to filename the internal file corresponding
+                   | filename           to name. Not often used. 
+readinput          name                 read another input file and
+                                        give it the name $filen where n is
+                                        1 more than the previous highest-numbered input file
+empty              name                 | delete all the lines in the input file "name"
+                                        | affects only internal representation of file in
+                                        | memory; no changes on disk
+                                        | probably most useful for emptying the scratch file
+include            filename             insert lines of "filename" into the current *program*
+=================  ==================== =======================================================
 
 Commands for modifying the last line of the output file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

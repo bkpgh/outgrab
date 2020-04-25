@@ -1,7 +1,7 @@
 # outgrab tutorial file
-# This is a comment
+# This is a comment which is ignored by outgrab
 ! This is also a comment
-# Note that the following blank line is just ignored
+# The following blank line is also ignored
 
 #My first program
 print Hello World!
@@ -31,6 +31,7 @@ goto bottom
 dumpline
 print -----------------------------------------------------------
 print "   "
+
 
 print "goto 1532, then a single dumpline " 
 goto 1532

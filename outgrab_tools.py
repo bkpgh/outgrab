@@ -1403,12 +1403,12 @@ class ProgramFile(InputFile):
             self.setoutputfile(x)
             self.updatemsg(command)
 
-        elif command == "setoutputfilename" and self.execute:
+        elif command == "setoutputname" and self.execute:
             arg1,kwargdict = self.getargs(tokens,"comargdict")
             self.setfilename(self.output,arg1)
             self.updatemsg(command)
 
-        elif command == "setinputfilename" and self.execute:
+        elif command == "setinputname" and self.execute:
             arg1,kwargdict = self.getargs(tokens,"comargdict")
             self.setfilename(self.input,arg1)
             self.updatemsg(command)
